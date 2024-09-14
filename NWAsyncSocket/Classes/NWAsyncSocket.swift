@@ -17,17 +17,10 @@ import Network
 }
 
 @objc public protocol NWAsyncSocketDelegate {
-    func didConnect(socket: NWAsyncSocket)
-    func didFail(socket: NWAsyncSocket, error:Error)
-    func didClose(socket: NWAsyncSocket)
-    func didReceiveData(socket: NWAsyncSocket, data: Data)
-}
-
-public extension NWAsyncSocketDelegate {
-    func didConnect(socket: NWAsyncSocket) {}
-    func didFail(socket: NWAsyncSocket, error:Error) {}
-    func didClose(socket: NWAsyncSocket) {}
-    func didReceiveData(socket: NWAsyncSocket, data: Data) {}
+    @objc optional func didConnect(socket: NWAsyncSocket)
+    @objc optional func didFail(socket: NWAsyncSocket, error:Error)
+    @objc optional func didClose(socket: NWAsyncSocket)
+    @objc optional func didReceiveData(socket: NWAsyncSocket, data: Data)
 }
 
 public typealias NWAsyncSocketConnectCompletion = ((Bool, Error?) -> ())
@@ -237,7 +230,7 @@ public typealias NWAsyncSocketConnectCompletion = ((Bool, Error?) -> ())
         callbackConnectCompletion(isSuccess: true, error: nil)
         guard let delegate = self.delegate else { return }
         delegateQueue.async {
-            delegate.didConnect(socket: self)
+            delegate.didConnect?(socket: self)
         }
     }
     
@@ -246,7 +239,7 @@ public typealias NWAsyncSocketConnectCompletion = ((Bool, Error?) -> ())
         callbackConnectCompletion(isSuccess: false, error: error)
         guard let delegate = self.delegate else { return }
         delegateQueue.async {
-            delegate.didFail(socket: self, error: error)
+            delegate.didFail?(socket: self, error: error)
         }
     }
     
@@ -255,14 +248,14 @@ public typealias NWAsyncSocketConnectCompletion = ((Bool, Error?) -> ())
         callbackConnectCompletion(isSuccess: false, error: nil)
         guard let delegate = self.delegate else { return }
         delegateQueue.async {
-            delegate.didClose(socket: self)
+            delegate.didClose?(socket: self)
         }
     }
     
     private func onSocketDidReceiveData(data: Data) {
         guard let delegate = self.delegate else { return }
         delegateQueue.async {
-            delegate.didReceiveData(socket: self, data: data)
+            delegate.didReceiveData?(socket: self, data: data)
         }
     }
     

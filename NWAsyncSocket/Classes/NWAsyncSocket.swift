@@ -44,6 +44,8 @@ public typealias NWAsyncSocketConnectCompletion = ((Bool, Error?) -> ())
     private var timeoutTimer: DispatchSourceTimer?
     
     private let type: NWAsyncSocketType
+    public let host: String
+    public let port: UInt16
     
     private let innerQueue: DispatchQueue
     private let innerQueueKey: DispatchSpecificKey<Int>
@@ -56,6 +58,8 @@ public typealias NWAsyncSocketConnectCompletion = ((Bool, Error?) -> ())
     
     public init(host: String, port: UInt16, type: NWAsyncSocketType = .TCP, delegate: NWAsyncSocketDelegate? = nil, delegateQueue: DispatchQueue? = nil) {
         self.type = type
+        self.host = host
+        self.port = port
         self.delegate = delegate
         self.delegateQueue = delegateQueue ?? DispatchQueue.main
         innerQueue = .init(label: "com.queue.NWAsyncSocket")

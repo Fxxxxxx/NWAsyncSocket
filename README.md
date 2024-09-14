@@ -6,6 +6,18 @@ Asynchronous socket based on NWConnection.
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+* support protocol defines
+
+```
+@objc public enum NWAsyncSocketType: Int {
+    case TCP
+    case UDP
+    case TCPWithTLS
+    case UDPWithDTLS
+    @available(iOS 15.0, *) case QUIC
+}
+```
+
 * swift:
 
 ```

@@ -49,6 +49,24 @@ public typealias NWAsyncSocketConnectCompletion = ((Bool, Error?) -> ())
         connection.state
     }
     
+    @objc
+    public var state4oc: nw_connection_state_t {
+        switch connection.state {
+        case .ready:
+            nw_connection_state_ready
+        case .cancelled:
+            nw_connection_state_cancelled
+        case .preparing:
+            nw_connection_state_preparing
+        case .failed(let error):
+            nw_connection_state_failed
+        case .waiting(let error):
+            nw_connection_state_waiting
+        default:
+            nw_connection_state_invalid
+        }
+    }
+    
     public init(host: String, port: UInt16, type: NWAsyncSocketType = .TCP, delegate: NWAsyncSocketDelegate? = nil, delegateQueue: DispatchQueue? = nil) {
         self.type = type
         self.host = host
